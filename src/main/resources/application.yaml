@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: shoppy
+
+  main:
+    banner-mode: off
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/shoppy
+    username: demo
+    password: demo
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+logging:
+  level:
+    root: warn
+    org:
+      springframework:
+        security: DEBUG
+      hibernate:
+        SQL: DEBUG
+        orm:
+          jdbc:
+            bind: TRACE
+
+springdoc:
+  swagger-ui:
+    path: /swagger.html
+  api-docs:
+    path: /api-docs
