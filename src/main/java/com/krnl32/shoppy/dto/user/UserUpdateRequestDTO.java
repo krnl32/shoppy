@@ -1,4 +1,4 @@
-package com.krnl32.shoppy.dto;
+package com.krnl32.shoppy.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
 package com.krnl32.shoppy.handler;
 
-import com.krnl32.shoppy.dto.ErrorDTO;
+import com.krnl32.shoppy.dto.other.ErrorDTO;
 import com.krnl32.shoppy.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

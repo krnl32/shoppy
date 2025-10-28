@@ -1,9 +1,9 @@
 package com.krnl32.shoppy.mapper;
 
-import com.krnl32.shoppy.dto.UserDTO;
-import com.krnl32.shoppy.dto.UserPatchRequestDTO;
-import com.krnl32.shoppy.dto.UserRegisterRequestDTO;
-import com.krnl32.shoppy.dto.UserUpdateRequestDTO;
+import com.krnl32.shoppy.dto.user.UserDTO;
+import com.krnl32.shoppy.dto.user.UserPatchRequestDTO;
+import com.krnl32.shoppy.dto.user.UserRegisterRequestDTO;
+import com.krnl32.shoppy.dto.user.UserUpdateRequestDTO;
 import com.krnl32.shoppy.entity.User;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;

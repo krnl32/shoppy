@@ -1,8 +1,8 @@
 package com.krnl32.shoppy.controller;
 
-import com.krnl32.shoppy.dto.UserDTO;
-import com.krnl32.shoppy.dto.UserPatchRequestDTO;
-import com.krnl32.shoppy.dto.UserUpdateRequestDTO;
+import com.krnl32.shoppy.dto.user.UserDTO;
+import com.krnl32.shoppy.dto.user.UserPatchRequestDTO;
+import com.krnl32.shoppy.dto.user.UserUpdateRequestDTO;
 import com.krnl32.shoppy.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

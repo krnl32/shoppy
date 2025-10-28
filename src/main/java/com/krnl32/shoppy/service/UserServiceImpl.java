@@ -1,8 +1,8 @@
 package com.krnl32.shoppy.service;
 
-import com.krnl32.shoppy.dto.UserDTO;
-import com.krnl32.shoppy.dto.UserPatchRequestDTO;
-import com.krnl32.shoppy.dto.UserUpdateRequestDTO;
+import com.krnl32.shoppy.dto.user.UserDTO;
+import com.krnl32.shoppy.dto.user.UserPatchRequestDTO;
+import com.krnl32.shoppy.dto.user.UserUpdateRequestDTO;
 import com.krnl32.shoppy.exception.UserAlreadyExistsException;
 import com.krnl32.shoppy.exception.UserNotFoundException;
 import com.krnl32.shoppy.mapper.UserMapper;

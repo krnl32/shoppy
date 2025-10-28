@@ -1,7 +1,7 @@
 package com.krnl32.shoppy.service;
 
-import com.krnl32.shoppy.dto.UserDTO;
-import com.krnl32.shoppy.dto.UserRegisterRequestDTO;
+import com.krnl32.shoppy.dto.user.UserDTO;
+import com.krnl32.shoppy.dto.user.UserRegisterRequestDTO;
 import com.krnl32.shoppy.entity.User;
 import com.krnl32.shoppy.exception.UserAlreadyExistsException;
 import com.krnl32.shoppy.mapper.UserMapper;

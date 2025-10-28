@@ -1,4 +1,4 @@
-package com.krnl32.shoppy.dto;
+package com.krnl32.shoppy.dto.user;
 
 import lombok.Data;
 
