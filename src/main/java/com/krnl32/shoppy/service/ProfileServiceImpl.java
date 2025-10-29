@@ -5,6 +5,7 @@ import com.krnl32.shoppy.dto.profile.ProfileDTO;
 import com.krnl32.shoppy.dto.profile.ProfilePatchRequestDTO;
 import com.krnl32.shoppy.dto.profile.ProfileUpdateRequestDTO;
 import com.krnl32.shoppy.entity.Profile;
+import com.krnl32.shoppy.entity.User;
 import com.krnl32.shoppy.exception.ProfileNotFoundException;
 import com.krnl32.shoppy.exception.UserNotFoundException;
 import com.krnl32.shoppy.exception.ProfileAlreadyExistsException;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	public ProfileDTO findById(Long id) {
-		var profile = profileRepository.findById(id);
+		Optional<Profile> profile = profileRepository.findById(id);
 		if (profile.isEmpty()) {
 			throw new ProfileNotFoundException("Profile ID Not Found: " + id);
 		}
@@ -43,7 +45,7 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	public ProfileDTO create(ProfileCreateRequestDTO profileRequest) {
-		var user = userRepository.findById(profileRequest.getUserId());
+		Optional<User> user = userRepository.findById(profileRequest.getUserId());
 		if (user.isEmpty()) {
 			throw new UserNotFoundException(("User ID Not Found: " + profileRequest.getUserId()));
 		}
@@ -57,38 +59,38 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setUser(user.get());
 		user.get().setProfile(profile);
 
-		var savedProfile = profileRepository.save(profile);
+		Profile savedProfile = profileRepository.save(profile);
 		return profileMapper.toDTO(savedProfile);
 	}
 
 	@Override
 	public ProfileDTO update(Long id, ProfileUpdateRequestDTO profileRequest) {
-		var profile = profileRepository.findById(id);
+		Optional<Profile> profile = profileRepository.findById(id);
 		if (profile.isEmpty()) {
 			throw new ProfileNotFoundException("Profile ID Not Found: " + id);
 		}
 
 		profileMapper.update(profileRequest, profile.get());
-		var updatedProfile = profileRepository.save(profile.get());
+		Profile updatedProfile = profileRepository.save(profile.get());
 		return profileMapper.toDTO(updatedProfile);
 	}
 
 	@Override
 	public ProfileDTO patch(Long id, ProfilePatchRequestDTO profileRequest) {
-		var profile = profileRepository.findById(id);
+		Optional<Profile> profile = profileRepository.findById(id);
 		if (profile.isEmpty()) {
 			throw new ProfileNotFoundException("Profile ID Not Found: " + id);
 		}
 
 		profileMapper.patch(profileRequest, profile.get());
-		var patchedProfile = profileRepository.save(profile.get());
+		Profile patchedProfile = profileRepository.save(profile.get());
 		return profileMapper.toDTO(patchedProfile);
 	}
 
 	@Override
 	@Transactional
 	public void delete(Long id) {
-		var profile = profileRepository.findById(id);
+		Optional<Profile> profile = profileRepository.findById(id);
 		if (profile.isEmpty()) {
 			throw new ProfileNotFoundException("Profile ID Not Found: " + id);
 		}

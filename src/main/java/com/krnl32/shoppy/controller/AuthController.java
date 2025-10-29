@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -21,7 +23,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserRegisterRequestDTO userRequest, UriComponentsBuilder uriBuilder) {
         UserDTO userDTO = authService.registerUser(userRequest);
-        var uri = uriBuilder.path("/users/{userId}").buildAndExpand(userDTO.getId()).toUri();
+		URI uri = uriBuilder.path("/users/{userId}").buildAndExpand(userDTO.getId()).toUri();
         return ResponseEntity.created(uri).body(userDTO);
     }
 }

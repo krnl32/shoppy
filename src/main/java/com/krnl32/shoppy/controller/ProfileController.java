@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -32,7 +33,7 @@ public class ProfileController {
 	@PostMapping
 	public ResponseEntity<ProfileDTO> createProfile(@Valid @RequestBody ProfileCreateRequestDTO profileRequest, UriComponentsBuilder uriBuilder) {
 		ProfileDTO profileDTO = profileService.create(profileRequest);
-		var uri = uriBuilder.path("/profiles/{profileId}").buildAndExpand(profileDTO.getId()).toUri();
+		URI uri = uriBuilder.path("/profiles/{profileId}").buildAndExpand(profileDTO.getId()).toUri();
 		return ResponseEntity.created(uri).body(profileDTO);
 	}
 

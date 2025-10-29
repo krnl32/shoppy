@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ProfileExceptionHandler {
 	@ExceptionHandler(ProfileNotFoundException.class)
 	public ResponseEntity<ErrorDTO> handleProfileNotFoundException(ProfileNotFoundException exception) {
-		var	errorDTO = new ErrorDTO(HttpStatus.NO_CONTENT.value(), exception.getMessage(), System.currentTimeMillis());
+		var	errorDTO = new ErrorDTO(HttpStatus.NOT_FOUND.value(), exception.getMessage(), System.currentTimeMillis());
 		return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
 	}
 

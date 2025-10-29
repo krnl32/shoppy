@@ -3,6 +3,7 @@ package com.krnl32.shoppy.service;
 import com.krnl32.shoppy.dto.user.UserDTO;
 import com.krnl32.shoppy.dto.user.UserPatchRequestDTO;
 import com.krnl32.shoppy.dto.user.UserUpdateRequestDTO;
+import com.krnl32.shoppy.entity.User;
 import com.krnl32.shoppy.exception.UserAlreadyExistsException;
 import com.krnl32.shoppy.exception.UserNotFoundException;
 import com.krnl32.shoppy.mapper.UserMapper;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO findById(Long id) {
-        var user = userRepository.findById(id);
+		Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new UserNotFoundException("User ID Not Found: " + id);
         }
@@ -37,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO update(Long id, UserUpdateRequestDTO userRequest) {
-        var user = userRepository.findById(id);
+		Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new UserNotFoundException("User ID Not Found: " + id);
         }
@@ -51,13 +53,13 @@ public class UserServiceImpl implements UserService {
         }
 
         userMapper.update(userRequest, user.get());
-        var updatedUser = userRepository.save(user.get());
+		User updatedUser = userRepository.save(user.get());
         return userMapper.toDTO(updatedUser);
     }
 
     @Override
     public UserDTO patch(Long id, UserPatchRequestDTO userRequest) {
-        var user = userRepository.findById(id);
+		Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new UserNotFoundException("User ID Not Found: " + id);
         }
@@ -71,13 +73,13 @@ public class UserServiceImpl implements UserService {
         }
 
         userMapper.patch(userRequest, user.get());
-        var patchedUser = userRepository.save(user.get());
+		User patchedUser = userRepository.save(user.get());
         return userMapper.toDTO(patchedUser);
     }
 
     @Override
     public void delete(Long id) {
-        var user = userRepository.findById(id);
+		Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new UserNotFoundException("User ID Not Found: " + id);
         }
