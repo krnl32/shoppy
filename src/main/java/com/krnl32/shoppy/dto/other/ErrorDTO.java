@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class ErrorDTO {
     private int status;
     private String error;
+	private String path;
     private Long timestamp;
 }

@@ -6,9 +6,8 @@ import com.krnl32.shoppy.dto.profile.ProfilePatchRequestDTO;
 import com.krnl32.shoppy.dto.profile.ProfileUpdateRequestDTO;
 import com.krnl32.shoppy.entity.Profile;
 import com.krnl32.shoppy.entity.User;
-import com.krnl32.shoppy.exception.ProfileNotFoundException;
-import com.krnl32.shoppy.exception.UserNotFoundException;
-import com.krnl32.shoppy.exception.ProfileAlreadyExistsException;
+import com.krnl32.shoppy.exception.ResourceAlreadyExistsException;
+import com.krnl32.shoppy.exception.ResourceNotFoundException;
 import com.krnl32.shoppy.mapper.ProfileMapper;
 import com.krnl32.shoppy.repository.ProfileRepository;
 import com.krnl32.shoppy.repository.UserRepository;
@@ -37,7 +36,7 @@ public class ProfileServiceImpl implements ProfileService {
 	public ProfileDTO findById(Long id) {
 		Optional<Profile> profile = profileRepository.findById(id);
 		if (profile.isEmpty()) {
-			throw new ProfileNotFoundException("Profile ID Not Found: " + id);
+			throw new ResourceNotFoundException("Profile ID Not Found: " + id);
 		}
 
 		return profileMapper.toDTO(profile.get());
@@ -47,11 +46,11 @@ public class ProfileServiceImpl implements ProfileService {
 	public ProfileDTO create(ProfileCreateRequestDTO profileRequest) {
 		Optional<User> user = userRepository.findById(profileRequest.getUserId());
 		if (user.isEmpty()) {
-			throw new UserNotFoundException(("User ID Not Found: " + profileRequest.getUserId()));
+			throw new ResourceNotFoundException(("User ID Not Found: " + profileRequest.getUserId()));
 		}
 
 		if (user.get().getProfile() != null) {
-			throw new ProfileAlreadyExistsException("User ID Already Has a Profile: " + profileRequest.getUserId());
+			throw new ResourceAlreadyExistsException("User ID Already Has a Profile: " + profileRequest.getUserId());
 		}
 
 		Profile profile = profileMapper.toEntity(profileRequest);
@@ -67,7 +66,7 @@ public class ProfileServiceImpl implements ProfileService {
 	public ProfileDTO update(Long id, ProfileUpdateRequestDTO profileRequest) {
 		Optional<Profile> profile = profileRepository.findById(id);
 		if (profile.isEmpty()) {
-			throw new ProfileNotFoundException("Profile ID Not Found: " + id);
+			throw new ResourceNotFoundException("Profile ID Not Found: " + id);
 		}
 
 		profileMapper.update(profileRequest, profile.get());
@@ -79,7 +78,7 @@ public class ProfileServiceImpl implements ProfileService {
 	public ProfileDTO patch(Long id, ProfilePatchRequestDTO profileRequest) {
 		Optional<Profile> profile = profileRepository.findById(id);
 		if (profile.isEmpty()) {
-			throw new ProfileNotFoundException("Profile ID Not Found: " + id);
+			throw new ResourceNotFoundException("Profile ID Not Found: " + id);
 		}
 
 		profileMapper.patch(profileRequest, profile.get());
@@ -92,7 +91,7 @@ public class ProfileServiceImpl implements ProfileService {
 	public void delete(Long id) {
 		Optional<Profile> profile = profileRepository.findById(id);
 		if (profile.isEmpty()) {
-			throw new ProfileNotFoundException("Profile ID Not Found: " + id);
+			throw new ResourceNotFoundException("Profile ID Not Found: " + id);
 		}
 
 		profile.get().getUser().setProfile(null);

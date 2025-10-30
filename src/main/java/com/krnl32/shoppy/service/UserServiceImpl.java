@@ -4,8 +4,8 @@ import com.krnl32.shoppy.dto.user.UserDTO;
 import com.krnl32.shoppy.dto.user.UserPatchRequestDTO;
 import com.krnl32.shoppy.dto.user.UserUpdateRequestDTO;
 import com.krnl32.shoppy.entity.User;
-import com.krnl32.shoppy.exception.UserAlreadyExistsException;
-import com.krnl32.shoppy.exception.UserNotFoundException;
+import com.krnl32.shoppy.exception.ResourceAlreadyExistsException;
+import com.krnl32.shoppy.exception.ResourceNotFoundException;
 import com.krnl32.shoppy.mapper.UserMapper;
 import com.krnl32.shoppy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     public UserDTO findById(Long id) {
 		Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new UserNotFoundException("User ID Not Found: " + id);
+            throw new ResourceNotFoundException("User ID Not Found: " + id);
         }
 
         return userMapper.toDTO(user.get());
@@ -41,15 +41,15 @@ public class UserServiceImpl implements UserService {
     public UserDTO update(Long id, UserUpdateRequestDTO userRequest) {
 		Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new UserNotFoundException("User ID Not Found: " + id);
+            throw new ResourceNotFoundException("User ID Not Found: " + id);
         }
 
         if (userRepository.existsByEmailAndIdNot(userRequest.getEmail(), id)) {
-            throw new UserAlreadyExistsException("Email Already Exists");
+            throw new ResourceAlreadyExistsException("Email Already Exists");
         }
 
         if (userRepository.existsByUsernameAndIdNot(userRequest.getUsername(), id)) {
-            throw new UserAlreadyExistsException("Username Already Exists");
+            throw new ResourceAlreadyExistsException("Username Already Exists");
         }
 
         userMapper.update(userRequest, user.get());
@@ -61,15 +61,15 @@ public class UserServiceImpl implements UserService {
     public UserDTO patch(Long id, UserPatchRequestDTO userRequest) {
 		Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new UserNotFoundException("User ID Not Found: " + id);
+            throw new ResourceNotFoundException("User ID Not Found: " + id);
         }
 
         if (userRepository.existsByEmailAndIdNot(userRequest.getEmail(), id)) {
-            throw new UserAlreadyExistsException("Email Already Exists");
+            throw new ResourceAlreadyExistsException("Email Already Exists");
         }
 
         if (userRepository.existsByUsernameAndIdNot(userRequest.getUsername(), id)) {
-            throw new UserAlreadyExistsException("Username Already Exists");
+            throw new ResourceAlreadyExistsException("Username Already Exists");
         }
 
         userMapper.patch(userRequest, user.get());
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
     public void delete(Long id) {
 		Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            throw new UserNotFoundException("User ID Not Found: " + id);
+            throw new ResourceNotFoundException("User ID Not Found: " + id);
         }
 
         userRepository.delete(user.get());

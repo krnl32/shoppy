@@ -3,7 +3,7 @@ package com.krnl32.shoppy.service;
 import com.krnl32.shoppy.dto.user.UserDTO;
 import com.krnl32.shoppy.dto.user.UserRegisterRequestDTO;
 import com.krnl32.shoppy.entity.User;
-import com.krnl32.shoppy.exception.UserAlreadyExistsException;
+import com.krnl32.shoppy.exception.ResourceAlreadyExistsException;
 import com.krnl32.shoppy.mapper.UserMapper;
 import com.krnl32.shoppy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +18,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserDTO registerUser(UserRegisterRequestDTO userRequest) {
         if (userRepository.existsByEmail(userRequest.getEmail())) {
-            throw new UserAlreadyExistsException("Email Already Exists");
+            throw new ResourceAlreadyExistsException("Email Already Exists");
         }
 
         if (userRepository.existsByUsername(userRequest.getUsername())) {
-            throw new UserAlreadyExistsException("Username Already Exists");
+            throw new ResourceAlreadyExistsException("Username Already Exists");
         }
 
         User user = userMapper.toEntity(userRequest);

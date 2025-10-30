@@ -4,7 +4,7 @@ import com.krnl32.shoppy.dto.category.CategoryCreateUpdateRequestDTO;
 import com.krnl32.shoppy.dto.category.CategoryDTO;
 import com.krnl32.shoppy.dto.category.CategoryPatchRequestDTO;
 import com.krnl32.shoppy.entity.Category;
-import com.krnl32.shoppy.exception.CategoryNotFoundException;
+import com.krnl32.shoppy.exception.ResourceNotFoundException;
 import com.krnl32.shoppy.mapper.CategoryMapper;
 import com.krnl32.shoppy.repository.CategoryRepository;
 import jakarta.transaction.Transactional;
@@ -31,7 +31,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public CategoryDTO findById(Long id) {
 		Optional<Category> category = categoryRepository.findById(id);
 		if (category.isEmpty()) {
-			throw new CategoryNotFoundException("Category ID Not Found: " + id);
+			throw new ResourceNotFoundException("Category ID Not Found: " + id);
 		}
 
 		return categoryMapper.toDTO(category.get());
@@ -49,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public CategoryDTO update(Long id, CategoryCreateUpdateRequestDTO categoryRequest) {
 		Optional<Category> category = categoryRepository.findById(id);
 		if (category.isEmpty()) {
-			throw new CategoryNotFoundException("Category ID Not Found: " + id);
+			throw new ResourceNotFoundException("Category ID Not Found: " + id);
 		}
 
 		categoryMapper.update(categoryRequest, category.get());
@@ -61,7 +61,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public CategoryDTO patch(Long id, CategoryPatchRequestDTO categoryRequest) {
 		Optional<Category> category = categoryRepository.findById(id);
 		if (category.isEmpty()) {
-			throw new CategoryNotFoundException("Category ID Not Found: " + id);
+			throw new ResourceNotFoundException("Category ID Not Found: " + id);
 		}
 
 		categoryMapper.patch(categoryRequest, category.get());
@@ -73,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
 	public void delete(Long id) {
 		Optional<Category> category = categoryRepository.findById(id);
 		if (category.isEmpty()) {
-			throw new CategoryNotFoundException("Category ID Not Found: " + id);
+			throw new ResourceNotFoundException("Category ID Not Found: " + id);
 		}
 
 		category.get().getProducts().forEach(product -> product.setCategory(null));

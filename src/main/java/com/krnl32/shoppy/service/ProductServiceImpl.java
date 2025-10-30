@@ -5,8 +5,7 @@ import com.krnl32.shoppy.dto.product.ProductDTO;
 import com.krnl32.shoppy.dto.product.ProductPatchRequestDTO;
 import com.krnl32.shoppy.entity.Category;
 import com.krnl32.shoppy.entity.Product;
-import com.krnl32.shoppy.exception.CategoryNotFoundException;
-import com.krnl32.shoppy.exception.ProductNotFoundException;
+import com.krnl32.shoppy.exception.ResourceNotFoundException;
 import com.krnl32.shoppy.mapper.ProductMapper;
 import com.krnl32.shoppy.repository.CategoryRepository;
 import com.krnl32.shoppy.repository.ProductRepository;
@@ -34,7 +33,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductDTO findById(Long id) {
 		Optional<Product> product = productRepository.findById(id);
 		if (product.isEmpty()) {
-			throw new ProductNotFoundException("Product ID Not Found: " + id);
+			throw new ResourceNotFoundException("Product ID Not Found: " + id);
 		}
 
 		return productMapper.toDTO(product.get());
@@ -44,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
 	public ProductDTO create(ProductCreateUpdateRequestDTO productRequest) {
 		Optional<Category> category = categoryRepository.findById(productRequest.getCategoryId());
 		if (category.isEmpty()) {
-			throw new CategoryNotFoundException("Category ID Not Found: " + productRequest.getCategoryId());
+			throw new ResourceNotFoundException("Category ID Not Found: " + productRequest.getCategoryId());
 		}
 
 		Product product = productMapper.toEntity(productRequest);
@@ -58,12 +57,12 @@ public class ProductServiceImpl implements ProductService {
 	public ProductDTO update(Long id, ProductCreateUpdateRequestDTO productRequest) {
 		Optional<Product> product = productRepository.findById(id);
 		if (product.isEmpty()) {
-			throw new ProductNotFoundException("Product ID Not Found: " + id);
+			throw new ResourceNotFoundException("Product ID Not Found: " + id);
 		}
 
 		Optional<Category> category = categoryRepository.findById(productRequest.getCategoryId());
 		if (category.isEmpty()) {
-			throw new CategoryNotFoundException("Category ID Not Found: " + productRequest.getCategoryId());
+			throw new ResourceNotFoundException("Category ID Not Found: " + productRequest.getCategoryId());
 		}
 
 		productMapper.update(productRequest, product.get());
@@ -77,14 +76,14 @@ public class ProductServiceImpl implements ProductService {
 	public ProductDTO patch(Long id, ProductPatchRequestDTO productRequest) {
 		Optional<Product> product = productRepository.findById(id);
 		if (product.isEmpty()) {
-			throw new ProductNotFoundException("Product ID Not Found: " + id);
+			throw new ResourceNotFoundException("Product ID Not Found: " + id);
 		}
 
 		if (productRequest.getCategoryId() != null) {
 			Optional<Category> category = categoryRepository.findById(productRequest.getCategoryId());
 
 			if (category.isEmpty()) {
-				throw new CategoryNotFoundException("Category ID Not Found: " + productRequest.getCategoryId());
+				throw new ResourceNotFoundException("Category ID Not Found: " + productRequest.getCategoryId());
 			}
 
 			product.get().setCategory(category.get());
@@ -100,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
 	public void delete(Long id) {
 		Optional<Product> product = productRepository.findById(id);
 		if (product.isEmpty()) {
-			throw new ProductNotFoundException("Product ID Not Found: " + id);
+			throw new ResourceNotFoundException("Product ID Not Found: " + id);
 		}
 
 		productRepository.delete(product.get());
