@@ -32,7 +32,7 @@ public class ProductController {
 	@PostMapping
 	public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductCreateUpdateRequestDTO productRequest, UriComponentsBuilder uriBuilder) {
 		ProductDTO productDTO = productService.create(productRequest);
-		URI uri = uriBuilder.path("/products/{productId}").buildAndExpand(productDTO.getId()).toUri();
+		URI uri = uriBuilder.path("/api/products/{productId}").buildAndExpand(productDTO.getId()).toUri();
 		return ResponseEntity.created(uri).body(productDTO);
 	}
 

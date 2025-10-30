@@ -33,7 +33,7 @@ public class ProfileController {
 	@PostMapping
 	public ResponseEntity<ProfileDTO> createProfile(@Valid @RequestBody ProfileCreateRequestDTO profileRequest, UriComponentsBuilder uriBuilder) {
 		ProfileDTO profileDTO = profileService.create(profileRequest);
-		URI uri = uriBuilder.path("/profiles/{profileId}").buildAndExpand(profileDTO.getId()).toUri();
+		URI uri = uriBuilder.path("/api/profiles/{profileId}").buildAndExpand(profileDTO.getId()).toUri();
 		return ResponseEntity.created(uri).body(profileDTO);
 	}
 
