@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class AuthExceptionHandler {
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorDTO> handleUserAlreadyExistsException(UserAlreadyExistsException exception) {
-        var errorDTO = new ErrorDTO(HttpStatus.CONFLICT.value(), exception.getMessage(), System.currentTimeMillis());
+		ErrorDTO errorDTO = new ErrorDTO(HttpStatus.CONFLICT.value(), exception.getMessage(), System.currentTimeMillis());
         return new ResponseEntity<>(errorDTO, HttpStatus.CONFLICT);
     }
 }
