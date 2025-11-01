@@ -1,9 +1,7 @@
 package com.krnl32.shoppy;
 
-import com.krnl32.shoppy.entity.Category;
-import com.krnl32.shoppy.entity.Product;
-import com.krnl32.shoppy.entity.Profile;
-import com.krnl32.shoppy.entity.User;
+import com.krnl32.shoppy.entity.*;
+import com.krnl32.shoppy.repository.CartRepository;
 import com.krnl32.shoppy.repository.CategoryRepository;
 import com.krnl32.shoppy.repository.ProductRepository;
 import com.krnl32.shoppy.repository.UserRepository;
@@ -14,6 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 @SpringBootApplication
@@ -24,10 +24,11 @@ public class ShoppyApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(AuthService authService, UserRepository userRepository, CategoryRepository categoryRepository, ProductRepository productRepository) {
+	public CommandLineRunner commandLineRunner(AuthService authService, UserRepository userRepository, CategoryRepository categoryRepository, ProductRepository productRepository, CartRepository cartRepository) {
 		return runner -> {
 			createUsersAndProfiles(userRepository);
 			createCategoriesAndProducts(categoryRepository);
+			createCartsAndCartItems(cartRepository, productRepository);
 		};
 	}
 
@@ -83,5 +84,27 @@ public class ShoppyApplication {
 		product4.setCategory(category3);
 
 		categoryRepository.saveAll(List.of(category1, category2, category3));
+	}
+
+	private void createCartsAndCartItems(CartRepository cartRepository, ProductRepository productRepository) {
+		Product product5 = new Product(null, "Product5", "Product5Desc", 9.99d, 5, null);
+		Product product6 = new Product(null, "Product6", "Product6Desc", 19.99d, 9, null);
+		Product product7 = new Product(null, "Product7", "Product7Desc", 29.99d, 15, null);
+
+		Cart cart1 = new Cart(null, LocalDateTime.now(), new LinkedHashSet<>());
+		CartItem cartItem1 = new CartItem(null, cart1, product5, 3);
+		cart1.getItems().add(cartItem1);
+
+		Cart cart2 = new Cart(null, LocalDateTime.now(), new LinkedHashSet<>());
+		CartItem cartItem2 = new CartItem(null, cart2, product6, 4);
+		CartItem cartItem3 = new CartItem(null, cart2, product7, 7);
+		cart2.getItems().add(cartItem2);
+		cart2.getItems().add(cartItem3);
+
+		Cart cart3 = new Cart(null, LocalDateTime.now(), new LinkedHashSet<>());
+
+		cartRepository.save(cart1);
+		cartRepository.save(cart2);
+		cartRepository.save(cart3);
 	}
 }
