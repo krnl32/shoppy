@@ -6,6 +6,7 @@ import com.krnl32.shoppy.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,6 +39,12 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ErrorDTO> handleResourceAlreadyExistsException(ResourceAlreadyExistsException exception, HttpServletRequest request) {
 		ErrorDTO errorDTO = new ErrorDTO(HttpStatus.CONFLICT.value(), exception.getMessage(), request.getRequestURI(), System.currentTimeMillis());
 		return new ResponseEntity<>(errorDTO, HttpStatus.CONFLICT);
+	}
+
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<ErrorDTO> handleBadCredentialsException(BadCredentialsException exception, HttpServletRequest request) {
+		ErrorDTO errorDTO = new ErrorDTO(HttpStatus.UNAUTHORIZED.value(), exception.getMessage(), request.getRequestURI(), System.currentTimeMillis());
+		return new ResponseEntity<>(errorDTO, HttpStatus.UNAUTHORIZED);
 	}
 
 //    @ExceptionHandler(Exception.class)

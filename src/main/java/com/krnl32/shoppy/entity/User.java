@@ -24,6 +24,10 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+	@Column(name = "role", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private Role role;
+
 	@OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
 	private Profile profile;
 }

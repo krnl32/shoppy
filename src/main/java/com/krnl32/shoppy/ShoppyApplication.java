@@ -10,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,35 +25,43 @@ public class ShoppyApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(AuthService authService, UserRepository userRepository, CategoryRepository categoryRepository, ProductRepository productRepository, CartRepository cartRepository) {
+	public CommandLineRunner commandLineRunner(AuthService authService, UserRepository userRepository, CategoryRepository categoryRepository, ProductRepository productRepository, CartRepository cartRepository, PasswordEncoder passwordEncoder) {
 		return runner -> {
-			createUsersAndProfiles(userRepository);
+			createUsersAndProfiles(userRepository, passwordEncoder);
 			createCategoriesAndProducts(categoryRepository);
 			createCartsAndCartItems(cartRepository, productRepository);
 		};
 	}
 
-	private void createUsersAndProfiles(UserRepository userRepository) {
+	private void createUsersAndProfiles(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 		//			authService.registerUser(new UserRegisterRequestDTO("user1@users.com", "user1", "pass1234"));
 //			authService.registerUser(new UserRegisterRequestDTO("user2@users.com", "user2", "pass1234"));
 //			authService.registerUser(new UserRegisterRequestDTO("user3@users.com", "user3", "pass1234"));
 
-		User user1 = new User(null, "user1@users.com", "user1", "pass1234", null);
+		User user1 = new User(null, "user1@users.com", "user1", "pass1234", Role.USER, null);
 		Profile profile1 = new Profile(null, "first1", "last1", LocalDate.now(), "1234", "Home", "None", user1);
 		user1.setProfile(profile1);
 
-		User user2 = new User(null, "user2@users.com", "user2", "pass1234", null);
+		User user2 = new User(null, "user2@users.com", "user2", "pass1234", Role.USER, null);
 		Profile profile2 = new Profile(null, "first2", "last2", LocalDate.now(), "1234", "Home", "None", user2);
 		user2.setProfile(profile2);
 
-		User user3 = new User(null, "user3@users.com", "user3", "pass1234", null);
+		User user3 = new User(null, "user3@users.com", "user3", "pass1234", Role.USER, null);
 		Profile profile3 = new Profile(null, "first3", "last3", LocalDate.now(), "1234", "Home", "None", user3);
 		user3.setProfile(profile3);
 
-		User user4 = new User(null, "user4@users.com", "user4", "pass1234", null);
-		User user5 = new User(null, "user5@users.com", "user5", "pass1234", null);
-		User user6 = new User(null, "user6@users.com", "user6", "pass1234", null);
-		User user7 = new User(null, "user7@users.com", "user7", "pass1234", null);
+		User user4 = new User(null, "user4@users.com", "user4", "pass1234", Role.USER, null);
+		User user5 = new User(null, "user5@users.com", "user5", "pass1234", Role.USER, null);
+		User user6 = new User(null, "user6@users.com", "user6", "pass1234", Role.USER, null);
+		User user7 = new User(null, "user7@users.com", "user7", "pass1234", Role.USER, null);
+
+		User user1234 = new User(null, "user1234@users.com", "user1234", passwordEncoder.encode("pass1234"), Role.USER, null);
+		Profile profile1234 = new Profile(null, "first1234", "last1234", LocalDate.now(), "1234", "Home", "None", user1234);
+		user1234.setProfile(profile1234);
+
+		User admin1234 = new User(null, "admin1234@users.com", "admin1234", passwordEncoder.encode("pass1234"), Role.ADMIN, null);
+		Profile profileAdmin1234 = new Profile(null, "firstAdmin1234", "lastAdmin1234", LocalDate.now(), "1234", "HomeAdmin", "None", admin1234);
+		admin1234.setProfile(profileAdmin1234);
 
 		userRepository.save(user1);
 		userRepository.save(user2);
@@ -61,6 +70,9 @@ public class ShoppyApplication {
 		userRepository.save(user5);
 		userRepository.save(user6);
 		userRepository.save(user7);
+
+		userRepository.save(user1234);
+		userRepository.save(admin1234);
 	}
 
 	private void createCategoriesAndProducts(CategoryRepository categoryRepository) {
