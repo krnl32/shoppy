@@ -38,18 +38,4 @@ public class Profile {
 	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
 	@JoinColumn(name = "user_id")
 	private User user;
-
-	@Override
-	public String toString() {
-		return "Profile{" +
-			"id=" + id +
-			", firstName='" + firstName + '\'' +
-			", lastName='" + lastName + '\'' +
-			", dateOfBirth=" + dateOfBirth +
-			", phoneNumber='" + phoneNumber + '\'' +
-			", bio='" + bio + '\'' +
-			", company='" + company + '\'' +
-			", user=" + user.getId() +
-			'}';
-	}
 }

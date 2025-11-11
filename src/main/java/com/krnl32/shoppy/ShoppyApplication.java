@@ -1,11 +1,9 @@
 package com.krnl32.shoppy;
 
 import com.krnl32.shoppy.entity.*;
-import com.krnl32.shoppy.repository.CartRepository;
-import com.krnl32.shoppy.repository.CategoryRepository;
-import com.krnl32.shoppy.repository.ProductRepository;
-import com.krnl32.shoppy.repository.UserRepository;
+import com.krnl32.shoppy.repository.*;
 import com.krnl32.shoppy.service.AuthService;
+import com.krnl32.shoppy.service.CartService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -25,11 +23,12 @@ public class ShoppyApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(AuthService authService, UserRepository userRepository, CategoryRepository categoryRepository, ProductRepository productRepository, CartRepository cartRepository, PasswordEncoder passwordEncoder) {
+	public CommandLineRunner commandLineRunner(OrderRepository orderRepository, CartService cartService, AuthService authService, UserRepository userRepository, CategoryRepository categoryRepository, ProductRepository productRepository, CartRepository cartRepository, PasswordEncoder passwordEncoder) {
 		return runner -> {
 			createUsersAndProfiles(userRepository, passwordEncoder);
 			createCategoriesAndProducts(categoryRepository);
 			createCartsAndCartItems(cartRepository, productRepository);
+			createOrderAndOrderItems(orderRepository);
 		};
 	}
 
@@ -118,5 +117,37 @@ public class ShoppyApplication {
 		cartRepository.save(cart1);
 		cartRepository.save(cart2);
 		cartRepository.save(cart3);
+	}
+
+	private void createOrderAndOrderItems(OrderRepository orderRepository) {
+		User usertest = new User(null, "usertest@users.com", "usertest", "pass1234", Role.USER, null);
+		Profile profileusertest = new Profile(null, "usertest", "usertest", LocalDate.now(), "1234", "Home", "None", usertest);
+		usertest.setProfile(profileusertest);
+
+		Product product6 = new Product(null, "Product6", "Product6Desc", 19.99d, 9, null);
+		Product product7 = new Product(null, "Product7", "Product7Desc", 29.99d, 15, null);
+
+		Cart cart2 = new Cart(null, LocalDateTime.now(), new LinkedHashSet<>());
+		CartItem cartItem2 = new CartItem(null, cart2, product6, 4);
+		CartItem cartItem3 = new CartItem(null, cart2, product7, 7);
+		cart2.getItems().add(cartItem2);
+		cart2.getItems().add(cartItem3);
+
+		Order order = new Order();
+		order.setCustomer(usertest);
+		order.setPaymentStatus(PaymentStatus.PENDING);
+		order.setTotalPrice(cart2.getTotalPrice());
+
+		cart2.getItems().forEach(cartItem -> {
+			OrderItem orderItem = new OrderItem();
+			orderItem.setOrder(order);
+			orderItem.setProduct(cartItem.getProduct());
+			orderItem.setQuantity(cartItem.getQuantity());
+			orderItem.setUnitPrice(cartItem.getProduct().getPrice());
+			orderItem.setTotalPrice(cartItem.getTotalPrice());
+			order.getItems().add(orderItem);
+		});
+
+		orderRepository.save(order);
 	}
 }

@@ -1,11 +1,13 @@
 package com.krnl32.shoppy.handler;
 
 import com.krnl32.shoppy.dto.other.ErrorDTO;
+import com.krnl32.shoppy.exception.EmptyCartOrderException;
 import com.krnl32.shoppy.exception.ResourceAlreadyExistsException;
 import com.krnl32.shoppy.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -47,9 +49,21 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(errorDTO, HttpStatus.UNAUTHORIZED);
 	}
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ErrorDTO> handleException(Exception exception) {
-//        ErrorDTO error = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), System.currentTimeMillis());
-//        return ResponseEntity.badRequest().body(error);
-//    }
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<ErrorDTO> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception, HttpServletRequest request) {
+		ErrorDTO errorDTO = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), request.getRequestURI(), System.currentTimeMillis());
+		return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
+	}
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDTO> handleException(Exception exception, HttpServletRequest request) {
+		ErrorDTO errorDTO = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), request.getRequestURI(), System.currentTimeMillis());
+		return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
+    }
+
+	@ExceptionHandler(EmptyCartOrderException.class)
+	public ResponseEntity<ErrorDTO> handleEmptyCartOrderException(EmptyCartOrderException exception, HttpServletRequest request) {
+		ErrorDTO errorDTO = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), request.getRequestURI(), System.currentTimeMillis());
+		return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
+	}
 }

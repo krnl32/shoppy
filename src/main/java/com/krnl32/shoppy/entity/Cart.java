@@ -14,7 +14,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class Cart {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
