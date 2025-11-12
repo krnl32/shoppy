@@ -5,3 +5,8 @@ end_of_line = lf
 insert_final_newline = true
 indent_style = tab
 tab_width = 4
+
+# YAML files (Spring Boot, Kubernetes, etc.)
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2

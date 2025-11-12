@@ -54,6 +54,7 @@ public class SecurityConfig {
 					.requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
 					.requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
 					.requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
+					.requestMatchers(HttpMethod.POST, "/api/checkout/webhook").permitAll()
 					.requestMatchers("/api/admins/**").hasRole(Role.ADMIN.name())
 					.anyRequest().authenticated();
 			})

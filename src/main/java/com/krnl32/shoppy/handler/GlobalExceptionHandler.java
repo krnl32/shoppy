@@ -2,6 +2,7 @@ package com.krnl32.shoppy.handler;
 
 import com.krnl32.shoppy.dto.other.ErrorDTO;
 import com.krnl32.shoppy.exception.EmptyCartOrderException;
+import com.krnl32.shoppy.exception.PaymentException;
 import com.krnl32.shoppy.exception.ResourceAlreadyExistsException;
 import com.krnl32.shoppy.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,6 +61,12 @@ public class GlobalExceptionHandler {
 		ErrorDTO errorDTO = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), request.getRequestURI(), System.currentTimeMillis());
 		return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
     }
+
+	@ExceptionHandler(PaymentException.class)
+	public ResponseEntity<ErrorDTO> handlePaymentException(PaymentException exception, HttpServletRequest request) {
+		ErrorDTO errorDTO = new ErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), exception.getMessage(), request.getRequestURI(), System.currentTimeMillis());
+		return new ResponseEntity<>(errorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 	@ExceptionHandler(EmptyCartOrderException.class)
 	public ResponseEntity<ErrorDTO> handleEmptyCartOrderException(EmptyCartOrderException exception, HttpServletRequest request) {

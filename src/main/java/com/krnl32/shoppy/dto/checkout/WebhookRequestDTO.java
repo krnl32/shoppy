@@ -3,9 +3,11 @@ package com.krnl32.shoppy.dto.checkout;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
 @AllArgsConstructor
-public class CheckoutResponseDTO {
-	private Long orderId;
-	private String checkoutURL;
+public class WebhookRequestDTO {
+	private Map<String, String> headers;
+	private String payload;
 }
