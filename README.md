@@ -1,2 +1,2 @@
-Under Development
-API Docs: localhost:8080/swagger.html
+# Shop E-Commerce Rest API
+### API Docs: localhost:8080/swagger-ui/index.html

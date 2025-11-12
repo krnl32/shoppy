@@ -39,11 +39,14 @@ public class StripePaymentService implements PaymentService {
 	@Override
 	public CheckoutSession createCheckoutSession(Order order) {
 		try {
+			var paymentIntentData = SessionCreateParams.PaymentIntentData.builder()
+				.putMetadata("order_id", order.getId().toString()).build();
+
 			var builder = SessionCreateParams.builder()
 				.setMode(SessionCreateParams.Mode.PAYMENT)
 				.setSuccessUrl(websiteURL + successPath + "?orderId=" + order.getId())
 				.setCancelUrl(websiteURL + cancelPath)
-				.putMetadata("order_id", order.getId().toString());
+				.setPaymentIntentData(paymentIntentData);
 
 			order.getItems().forEach(orderItem -> {
 				var productData = SessionCreateParams.LineItem.PriceData.ProductData.builder()
