@@ -6,46 +6,19 @@ spring:
     banner-mode: off
 
   datasource:
-    url: jdbc:mysql://localhost:3306/shoppy
-    username: demo
-    password: demo
-
-  jpa:
-    hibernate:
-      ddl-auto: create
-
-  security:
-    user:
-      name: demo
-      password: demo
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
 
   jwt:
     secret: ${JWT_SECRET}
-    accessTokenExpiration: 604800
-    refreshTokenExpiration: 604800
+    access-token-expiration: 900
+    refresh-token-expiration: 604800
 
-logging:
-  level:
-    root: warn
-    org:
-      springframework:
-        security: DEBUG
-      hibernate:
-        SQL: DEBUG
-        orm:
-          jdbc:
-            bind: TRACE
-
-springdoc:
-  swagger-ui:
-    path: /swagger.html
-  api-docs:
-    path: /api-docs
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}
 
 app:
-  web:
-    url: http://localhost:8080
-
   payment:
     url:
       success-path: /api/checkout/success

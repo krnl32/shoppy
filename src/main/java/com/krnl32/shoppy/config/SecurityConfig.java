@@ -1,11 +1,10 @@
 package com.krnl32.shoppy.config;
 
-import com.krnl32.shoppy.entity.Role;
 import com.krnl32.shoppy.filter.JwtAuthenticationFilter;
+import com.krnl32.shoppy.security.SecurityRules;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -22,12 +21,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 	private final UserDetailsService userDetailsService;
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
+	private final List<SecurityRules> securityRules;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -50,13 +52,8 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
 			.authorizeHttpRequests(customizer -> {
-				customizer
-					.requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
-					.requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-					.requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
-					.requestMatchers(HttpMethod.POST, "/api/checkout/webhook").permitAll()
-					.requestMatchers("/api/admins/**").hasRole(Role.ADMIN.name())
-					.anyRequest().authenticated();
+				securityRules.forEach(rule -> rule.configure(customizer));
+				customizer.anyRequest().authenticated();
 			})
 			.exceptionHandling(customizer -> {
 				customizer
